@@ -20,18 +20,20 @@ public class SecurityConfig {
 
         http
                 .httpBasic(httpBasic -> httpBasic.disable())
-                .formLogin(formLogin -> formLogin.disable())
+//                .formLogin(formLogin -> formLogin.disable())
                 .csrf(csrf -> csrf.disable());
+
 
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
                                 "/",
-                                "/login.html",
-                                "/signup.html",
-                                "/index.html",
-                                "/api/v3/users/**",
-                                "/signup").permitAll()
+                                "/login",
+                                "/signup",              // Thymeleaf 회원가입 페이지
+                                "index.html",
+                                "/assets/**",
+                                "/api/v3/users/**"
+                                ).permitAll()
 
                         .anyRequest().authenticated());
 
