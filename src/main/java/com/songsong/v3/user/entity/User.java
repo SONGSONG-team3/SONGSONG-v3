@@ -39,6 +39,9 @@ public class User {
     @Column(name = "user_like")
     private int userLike;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     @OneToMany(mappedBy = "user")
     private List<Playlist> playlists = new ArrayList<>();
 
