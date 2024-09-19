@@ -4,8 +4,8 @@ import com.songsong.v3.user.User;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "like")
-public class Like {
+@Table(name = "user_like")
+public class UserLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -19,6 +19,4 @@ public class Like {
     @JoinColumn(name = "user_to", nullable = false)
     private User userTo;
 
-    @Column(nullable = false)
-    private int status;
 }
