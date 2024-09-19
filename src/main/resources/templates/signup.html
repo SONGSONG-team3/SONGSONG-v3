@@ -173,7 +173,7 @@
             if( document.querySelectorAll("form .is-invalid").length > 0 ){
                 alert("입력이 올바르지 않습니다.")
             } else{
-                // signup();
+                signup();
             }
         };
 
@@ -220,6 +220,66 @@
         if (regexp.test(userEmail)) return true;
         else return false;
     }
+
+    async function signup() {
+        var userName = document.querySelector("#userName").value;
+        var userEmail = document.querySelector("#userEmail").value;
+        var userPassword = document.querySelector("#userPassword").value;
+        var userNickname = document.querySelector("#userNickname").value;
+
+        const categoryMapping = {
+            '발라드': 1,
+            '힙합': 2,
+            '인디': 3,
+            '락/메탈': 4,
+            '트로트': 5,
+            '댄스': 6,
+            'R&B': 7,
+            '밴드': 8,
+        };
+
+        const categoryIds = Array.from(selectedCategories).map(name => categoryMapping[name]);
+
+        let fetchOptions = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userDto: {
+                    userName: userName,
+                    userEmail: userEmail,
+                    userPassword: userPassword,
+                    userNickname: userNickname,
+                    userImage: ""
+                },
+                categories: categoryIds
+            }),
+        }
+
+        let response = await fetch("/api/v3/users/signup", fetchOptions);
+        console.log(response);
+        let data = await response.json();
+
+        if (data.success) {
+            if (data.msg === "Success") {
+                alertify.alert('Welcome!', '송송🎶 회원가입을 축하합니다.', function(){
+                    window.location.href="/";
+                });
+            } else {
+                alert("Unexpected success message");
+            }
+        } else {
+            if (data.msg === "Email already exists") {
+                alertify.alert('중복 이메일', '이미 사용 중인 이메일입니다.');
+            } else if (data.msg === "Nickname already exists") {
+                alertify.alert('중복 닉네임', '이미 사용 중인 닉네임입니다.');
+            } else {
+                alert("서버 오류");
+            }
+        }
+    }
+
 </script>
 
 </body>
