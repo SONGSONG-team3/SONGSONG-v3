@@ -1,14 +1,19 @@
-package com.songsong.v3.user;
+package com.songsong.v3.user.entity;
 
 import com.songsong.v3.playlist.Playlist;
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name="user")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")
@@ -29,7 +34,7 @@ public class User {
     private String userImage;
 
     @Column(name = "user_register_date")
-    private Date userRegisterDate;
+    private LocalDateTime userRegisterDate;
 
     @Column(name = "user_like")
     private int userLike;

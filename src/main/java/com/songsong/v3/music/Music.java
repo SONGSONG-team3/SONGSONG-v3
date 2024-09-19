@@ -1,6 +1,6 @@
 package com.songsong.v3.music;
 
-import com.songsong.v3.user.Category;
+import com.songsong.v3.user.entity.Category;
 import com.songsong.v3.playlist.Playlist;
 import jakarta.persistence.*;
 

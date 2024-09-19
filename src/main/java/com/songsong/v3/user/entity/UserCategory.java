@@ -1,9 +1,11 @@
-package com.songsong.v3.user;
+package com.songsong.v3.user.entity;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user_category")
+@NoArgsConstructor
 public class UserCategory {
 
     @Id
@@ -19,5 +21,9 @@ public class UserCategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public UserCategory(User user, Category category) {
+        this.user = user;
+        this.category = category;
+    }
 }
 
