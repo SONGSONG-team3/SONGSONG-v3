@@ -38,14 +38,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final CategoryRepository categoryRepository;
     private final MusicService musicService;
 
-    public PlaylistServiceImpl(PlaylistRepository playlistRepository, MusicRepository musicRepository, UserRepository userRepository, CategoryRepository categoryRepository, MusicService musicService) {
-        this.playlistRepository = playlistRepository;
-        this.musicRepository = musicRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.musicService = musicService;
-    }
-
     @Override
     public PlaylistResultDto getPlaylistsByCategory(PlaylistParamDto playlistParamDto) {
         PlaylistResultDto resultDto = new PlaylistResultDto();

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
@@ -35,9 +36,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v3/playlists/")
-
-@Controller
-@RequestMapping("/api/v3/playlist")
 public class PlaylistController {
 
     private final PlaylistService playlistService;
@@ -55,9 +53,9 @@ public class PlaylistController {
             @RequestParam(defaultValue = "15") int size) {
 
         // 카테고리 이름 가져오기 (JPA로 변환)
-        String categoryName = categoryRepository.findById(categoryId)
-                .map(category -> category.getCategoryName())
-                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
+//        String categoryName = categoryRepository.findById(categoryId)
+//                .map(category -> category.getCategoryName())
+//                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
 
         PlaylistParamDto playlistParamDto = new PlaylistParamDto();
         playlistParamDto.setSearchCategory(categoryId);
