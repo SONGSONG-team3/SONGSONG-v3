@@ -24,4 +24,14 @@ public class PageController {
     public String mypage() {
         return "mypage";
     }
+
+    @GetMapping("/myplaylist")
+    public String myplaylist() {
+        return "myplaylist";
+    }
+
+    @GetMapping("/otherplaylist")
+    public String otherplaylist() {
+        return "otherplaylist";
+    }
 }

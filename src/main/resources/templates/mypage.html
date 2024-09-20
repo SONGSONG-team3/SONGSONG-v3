@@ -25,7 +25,7 @@
             <span class="nav-link" id="navName"></span>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/pages/myplaylist">My 플레이리스트</a>
+            <a class="nav-link" href="/myplaylist">My 플레이리스트</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/auth/logout">로그아웃</a>
@@ -164,7 +164,7 @@
 
       const cardHtml = `
         <div class="card-container">
-          <a href="/pages/detail/${playlistDto.userNo}">
+          <a href="/detail/${playlistDto.userNo}">
             <div class="card">
               <div class="card-body">
                 <img src="${userDto.userImage ? userDto.userImage : '/assets/img/noProfile.png'}" alt="User Image" />
