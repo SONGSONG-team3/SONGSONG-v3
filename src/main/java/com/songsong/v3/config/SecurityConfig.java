@@ -1,5 +1,7 @@
 package com.songsong.v3.config;
 
+import com.songsong.v3.common.CustomAccessDeniedHandler;
+import com.songsong.v3.common.CustomAuthenticationEntryPoint;
 import com.songsong.v3.user.service.CustomUserDetailsService;
 import com.songsong.v3.common.JwtAuthenticationFilter;
 import com.songsong.v3.common.JwtTokenProvider;
@@ -53,8 +55,12 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
 
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()) // 권한 예외 발생 처리
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // 인증 실패시 처리
+                );
         return http.build();
     }
 
