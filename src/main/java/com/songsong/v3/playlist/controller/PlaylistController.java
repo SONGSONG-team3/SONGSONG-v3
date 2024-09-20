@@ -148,9 +148,19 @@ public class PlaylistController {
     }
 
     @PostMapping("/addMusicToPlaylist")
-    public String addMusicToPlaylist(@RequestParam int userNo) {
+    public String addMusicToPlaylist(@RequestParam int userNo, @RequestParam int musicId, RedirectAttributes redirectAttributes) {
 
+        User loginUser = userService.findByUserNo(1); // 임시 로그인 유저
 
+        // 음악 중복 확인
+        List<Playlist> existingPlaylists = playlistService.findByUserAndMusic(loginUser.getUserNo(), musicId);
+        if (!existingPlaylists.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "이미 플레이리스트에 추가된 음악입니다.");
+            return "redirect:/api/v3/playlist/otherplaylist/" + userNo;
+        }
+
+        playlistService.addMusicToUserPlaylist(loginUser.getUserNo(), musicId);
+        redirectAttributes.addFlashAttribute("message", "음악이 성공적으로 추가되었습니다.");
         return "redirect:/api/v3/playlist/otherplaylist/" + userNo;
     }
 }

@@ -306,7 +306,7 @@
                 <a th:href="@{${playlist.music.musicLink}}" th:text="${playlist.music.musicName}">곡 링크</a>
             </td>
             <td>
-                <form th:action="@{/api/v3/playlist/addMusicToPlaylist}" method="post" onsubmit="return confirmDelete(event)">
+                <form th:action="@{/api/v3/playlist/addMusicToPlaylist}" method="post" onsubmit="return confirmAddMusic(event);">
                     <input type="hidden" name="userNo" th:value="${userNo}" />
                     <input type="hidden" name="musicId" th:value="${playlist.music.musicId}" />
                     <button type="submit" class="action-button">추가</button>
@@ -317,6 +317,19 @@
     </table>
 
 </div>
+<script>
+    function confirmAddMusic(event) {
+        return confirm("음악을 추가하시겠습니까?");
+    }
+
+    // 페이지가 로드될 때 메시지 확인
+    window.onload = function() {
+        const message = /*[[${message}]]*/ '';
+        if (message) {
+            alert(message); // 서버에서 전달된 메시지 알림
+        }
+    };
+</script>
 
     <script>
         document.querySelector('.like-button-container form').onsubmit = function(event) {

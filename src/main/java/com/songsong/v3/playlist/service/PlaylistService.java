@@ -10,5 +10,6 @@ public interface PlaylistService {
     List<Playlist> findByUserUserNo(int userNo);
     void deleteMusicFromPlaylist(int userNo, int musicId);
     void save(Playlist playlist);
-    void addMusicToUserPlaylist(User user, Music music);
+    void addMusicToUserPlaylist(int userNo, int musicId);
+    List<Playlist> findByUserAndMusic(int userNo, int musicId);
 }

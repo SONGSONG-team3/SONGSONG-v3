@@ -17,4 +17,5 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     @Transactional
     @Query("DELETE FROM Playlist p WHERE p.user.userNo = :userNo AND p.music.musicId = :musicId")
     void deleteByUserNoAndMusicId(@Param("userNo") int userNo, @Param("musicId") int musicId);
+    List<Playlist> findByUserUserNoAndMusicMusicId(int userNo, int musicId);
 }
