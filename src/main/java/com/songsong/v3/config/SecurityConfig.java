@@ -41,15 +41,17 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
-                                "/", // Thymeleaf 메인 페이지
+                                "/",
                                 "/login",
-                                "/signup",              // Thymeleaf 회원가입 페이지
+                                "/signup",
+                                "/mypage",
+                                "/myplaylist",
+                                "/otherplaylist",
                                 "index.html",
                                 "/assets/**",
                                 "/api/v3/users/signup",
                                 "/api/v3/users/login",
                                 "/api/v3/playlists/**"
-
                                 ).permitAll()
 
                         .anyRequest().authenticated())
