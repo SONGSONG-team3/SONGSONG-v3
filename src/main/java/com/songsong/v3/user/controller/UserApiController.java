@@ -6,7 +6,6 @@ import com.songsong.v3.user.dto.UserResultDto;
 import com.songsong.v3.user.entity.User;
 import com.songsong.v3.user.repository.UserRepository;
 import com.songsong.v3.user.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.songsong.v3.user.dto.UserLoginRequestDto;
@@ -76,26 +75,53 @@ public class UserApiController {
 
     @GetMapping("/mypage")
     @ResponseBody
-    public UserResultDto detailUser(HttpSession session) {
-//        int userNo = (int) session.getAttribute("userNo"); // Assuming userNo is stored in session
-        int userNo = 1;
+    public UserResultDto detailUser(@RequestHeader("Authorization") String token) {
+
+        LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
+
+        String jwtToken = token.substring(7);
+
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+
+        User user = userRepository.findByUserEmail(userEmail);
+        int userNo = user.getUserNo();
+
+        LOGGER.info("사용자 정보 요청: userNo = " + userEmail);
+
+
         return userService.detailMypage(userNo);
     }
 
     @PostMapping("/mypage/update")
     @ResponseBody
-    public UserResultDto updateUserMypage(@RequestBody UserDto userDto, HttpSession session) {
-//        int userNo = (int) session.getAttribute("userNo"); // Assuming userNo is stored in session
-        int userNo = 1;
+    public UserResultDto updateUserMypage(@RequestBody UserDto userDto, @RequestHeader("Authorization") String token ) {
+        LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
+
+        String jwtToken = token.substring(7);
+
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+
+        User user = userRepository.findByUserEmail(userEmail);
+        int userNo = user.getUserNo();
         userDto.setUserNo(userNo);
+
+        LOGGER.info("사용자 정보 요청: userNo = " + userEmail);
         return userService.updateUserMypage(userDto);
     }
 
     @PostMapping("/mypage/updatecate")
     @ResponseBody
-    public UserResultDto updateUserCategory(@RequestBody List<Integer> categoryIds, HttpSession session) {
-//        int userNo = (int) session.getAttribute("userNo"); // Assuming userNo is stored in session
-        int userNo = 1;
+    public UserResultDto updateUserCategory(@RequestBody List<Integer> categoryIds, @RequestHeader("Authorization") String token) {
+        LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
+
+        String jwtToken = token.substring(7);
+
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+
+        User user = userRepository.findByUserEmail(userEmail);
+        int userNo = user.getUserNo();
+
+        LOGGER.info("사용자 정보 요청: userNo = " + userEmail);
         return userService.updateUserCategory(userNo, categoryIds);
     }
 }
