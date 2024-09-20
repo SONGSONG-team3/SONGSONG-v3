@@ -1,16 +1,24 @@
-package com.songsong.v3.music;
+package com.songsong.v3.music.entity;
 
 import com.songsong.v3.user.entity.Category;
 import com.songsong.v3.playlist.entity.Playlist;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "music")
 @Setter
 @Getter
@@ -19,7 +27,7 @@ public class Music {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "music_id")
     private int musicId;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
     @Column(name = "music_name")

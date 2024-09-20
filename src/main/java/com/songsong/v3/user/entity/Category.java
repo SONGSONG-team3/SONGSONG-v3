@@ -1,16 +1,21 @@
 package com.songsong.v3.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "category")
-@Setter
 @Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
