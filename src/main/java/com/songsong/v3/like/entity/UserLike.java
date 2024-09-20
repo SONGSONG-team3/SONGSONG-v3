@@ -1,6 +1,6 @@
-package com.songsong.v3.like;
+package com.songsong.v3.like.entity;
 
-import com.songsong.v3.user.User;
+import com.songsong.v3.user.entity.User;
 import jakarta.persistence.*;
 
 @Entity

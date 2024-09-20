@@ -1,14 +1,19 @@
 package com.songsong.v3.music;
 
-import com.songsong.v3.user.Category;
-import com.songsong.v3.playlist.Playlist;
+import com.songsong.v3.user.entity.Category;
+import com.songsong.v3.playlist.entity.Playlist;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "music")
+@Setter
+@Getter
 public class Music {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

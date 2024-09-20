@@ -1,7 +1,9 @@
-package com.songsong.v3.user;
+package com.songsong.v3.user.entity;
 
-import com.songsong.v3.playlist.Playlist;
+import com.songsong.v3.playlist.entity.Playlist;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name="user")
+@Getter
+@Setter
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")

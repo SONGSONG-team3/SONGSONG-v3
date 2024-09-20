@@ -1,11 +1,15 @@
-package com.songsong.v3.playlist;
+package com.songsong.v3.playlist.entity;
 
 import com.songsong.v3.music.Music;
-import com.songsong.v3.user.User;
+import com.songsong.v3.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "playlist")
+@Getter
+@Setter
 public class Playlist {
 
     @Id
