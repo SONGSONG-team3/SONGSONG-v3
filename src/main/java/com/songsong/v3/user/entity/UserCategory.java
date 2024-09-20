@@ -1,4 +1,4 @@
-package com.songsong.v3.user;
+package com.songsong.v3.user.entity;
 
 import jakarta.persistence.*;
 
