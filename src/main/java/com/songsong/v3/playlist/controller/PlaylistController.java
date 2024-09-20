@@ -1,6 +1,7 @@
 package com.songsong.v3.playlist.controller;
 
 
+import com.songsong.v3.common.JwtTokenProvider;
 import com.songsong.v3.like.service.LikeService;
 import com.songsong.v3.music.entity.Music;
 import com.songsong.v3.music.service.MusicService;
@@ -8,9 +9,12 @@ import com.songsong.v3.playlist.entity.Playlist;
 import com.songsong.v3.playlist.service.PlaylistService;
 import com.songsong.v3.playlist.dto.PlaylistParamDto;
 import com.songsong.v3.playlist.dto.PlaylistResultDto;
+import com.songsong.v3.user.controller.UserApiController;
 import com.songsong.v3.user.repository.CategoryRepository;
-import jakarta.servlet.http.HttpSession;
+import com.songsong.v3.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import com.songsong.v3.user.entity.Category;
 import com.songsong.v3.user.entity.User;
@@ -30,8 +34,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v3/playlists/")
 public class PlaylistController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(UserApiController.class);
+    private final JwtTokenProvider jwtTokenProvider;
     private final PlaylistService playlistService;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
     private final UserCategoryService userCategoryService;
     private final UserService userService;
     private final MusicService musicService;
@@ -60,20 +67,18 @@ public class PlaylistController {
     }
 
     @GetMapping("/liked")
-    public ResponseEntity<PlaylistResultDto> getLikedPlaylists(HttpSession session) {
-        // 세션에서 userNo를 가져옵니다.
-//        Integer userNo = (Integer) session.getAttribute("userId");
+    public ResponseEntity<PlaylistResultDto> getLikedPlaylists(@RequestHeader("Authorization") String token) {
 
-        int userNo = 1;
-        // userNo가 null인 경우 처리
-//        if (userNo == null) {
-//            return ResponseEntity.badRequest().body(null);
-//        }
+        LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
 
-        // 서비스 메서드 호출
+        String jwtToken = token.substring(7);
+
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+
+        User user = userRepository.findByUserEmail(userEmail);
+        int userNo = user.getUserNo();
+
         PlaylistResultDto playlistResultDto = playlistService.getLikedPlaylistByUser(userNo);
-
-        // 결과 반환
         return ResponseEntity.ok(playlistResultDto);
     }
 
