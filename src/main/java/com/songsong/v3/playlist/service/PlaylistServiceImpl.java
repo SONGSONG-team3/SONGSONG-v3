@@ -3,6 +3,9 @@ package com.songsong.v3.playlist.service;
 import com.songsong.v3.playlist.dto.PlaylistDto;
 import com.songsong.v3.playlist.dto.PlaylistParamDto;
 import com.songsong.v3.playlist.dto.PlaylistResultDto;
+import com.songsong.v3.music.entity.Music;
+import com.songsong.v3.music.repository.MusicRepository;
+import com.songsong.v3.music.service.MusicService;
 import com.songsong.v3.playlist.entity.Playlist;
 import com.songsong.v3.playlist.repository.PlaylistRepository;
 import com.songsong.v3.user.dto.CategoryDto;
@@ -14,6 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
+import com.songsong.v3.user.service.UserService;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,8 +33,18 @@ import java.util.Optional;
 public class PlaylistServiceImpl implements PlaylistService {
 
     private final PlaylistRepository playlistRepository;
+    private final MusicRepository musicRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final MusicService musicService;
+
+    public PlaylistServiceImpl(PlaylistRepository playlistRepository, MusicRepository musicRepository, UserRepository userRepository, CategoryRepository categoryRepository, MusicService musicService) {
+        this.playlistRepository = playlistRepository;
+        this.musicRepository = musicRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.musicService = musicService;
+    }
 
     @Override
     public PlaylistResultDto getPlaylistsByCategory(PlaylistParamDto playlistParamDto) {
@@ -134,5 +150,35 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlistResultDto.setCount(playlistDtoList.size()); // 또는 다른 방식으로 총 곡 수 계산
 
         return playlistResultDto;
+    }
+    @Override
+    public List<Playlist> findByUserUserNo(int userNo) {
+        return playlistRepository.findByUser_UserNo(userNo);
+    }
+
+    @Transactional
+    public void deleteMusicFromPlaylist(int userNo, int musicId) {
+        playlistRepository.deleteByUserNoAndMusicId(userNo, musicId);
+    }
+
+    @Override
+    public void save(Playlist playlist) {
+        playlistRepository.save(playlist);
+    }
+
+    @Override
+    public void addMusicToUserPlaylist(int userNo, int musicId) {
+        Playlist newPlaylist = new Playlist();
+        User user = userRepository.findByUserNo(userNo);
+        Music music = musicService.findById(musicId);
+        newPlaylist.setUser(user);
+        newPlaylist.setMusic(music);
+
+        playlistRepository.save(newPlaylist);
+    }
+
+    @Override
+    public List<Playlist> findByUserAndMusic(int userNo, int musicId) {
+        return playlistRepository.findByUserUserNoAndMusicMusicId(userNo, musicId);
     }
 }

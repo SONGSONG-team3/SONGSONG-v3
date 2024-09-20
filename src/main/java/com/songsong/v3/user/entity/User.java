@@ -42,7 +42,7 @@ public class User {
     private String userImage;
 
     @Column(name = "user_register_date")
-    private LocalDateTime userRegisterDate;
+    private Date userRegisterDate;
 
     @Column(name = "user_like")
     private int userLike;

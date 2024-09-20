@@ -39,11 +39,12 @@ public class UserService {
     private final CategoryRepository categoryRepository;
     private final UserCategoryRepository userCategoryRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final  JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
     /**
      * 회원가입
+     *
      * @param userSignupRequestDto
      * @return
      */
@@ -111,6 +112,7 @@ public class UserService {
 
     /**
      * 로그인
+     *
      * @param userLoginRequestDto
      * @return
      */
@@ -139,7 +141,7 @@ public class UserService {
 
         } catch (Exception e) {
             // 2-7. 예외 발생 처리
-            LOGGER.info("로그인 예외 발생: " +  e.getMessage(), e);
+            LOGGER.info("로그인 예외 발생: " + e.getMessage(), e);
             throw new RuntimeException();
 
         }
@@ -204,7 +206,7 @@ public class UserService {
     public UserResultDto updateUserMypage(UserDto userDto) {
         UserResultDto userResultDto = new UserResultDto();
 
-        try{
+        try {
 
             Optional<User> optionalUser = userRepository.findById(userDto.getUserNo());
             if (optionalUser.isPresent()) {
@@ -218,7 +220,7 @@ public class UserService {
                 userRepository.save(user);
                 userResultDto.setResult("success");
 
-            } else{
+            } else {
                 userResultDto.setResult("fail");
             }
 
@@ -269,4 +271,9 @@ public class UserService {
 
         return userResultDto;
     }
+
+    public User findByUserNo(int userNo){
+        return userRepository.findByUserNo(userNo);
+    }
+
 }

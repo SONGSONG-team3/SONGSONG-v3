@@ -2,8 +2,10 @@ package com.songsong.v3.like.entity;
 
 import com.songsong.v3.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "user_like")
 public class UserLike {
     @Id

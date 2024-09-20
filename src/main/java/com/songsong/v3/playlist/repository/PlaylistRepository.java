@@ -4,7 +4,9 @@ import com.songsong.v3.playlist.dto.PlaylistDto;
 import com.songsong.v3.playlist.entity.Playlist;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -32,4 +34,10 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     @Query("select count(ul) from UserLike ul where ul.userFrom.userNo = :userNo")
     int getPlaylistCountByLiked(int userNo);
 
+    List<Playlist> findByUser_UserNo(int userNo);
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Playlist p WHERE p.user.userNo = :userNo AND p.music.musicId = :musicId")
+    void deleteByUserNoAndMusicId(@Param("userNo") int userNo, @Param("musicId") int musicId);
+    List<Playlist> findByUserUserNoAndMusicMusicId(int userNo, int musicId);
 }
