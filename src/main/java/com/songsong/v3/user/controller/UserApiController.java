@@ -49,8 +49,8 @@ public class UserApiController {
         return userLoginResultDto;
     }
 
-    @GetMapping("/me")
-    public int getUserInfo(@RequestHeader("Authorization") String token) {
+    @GetMapping("/info")
+    public UserDto getUserInfo(@RequestHeader("Authorization") String token) {
         LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
 
         String jwtToken = token.substring(7);
@@ -62,8 +62,15 @@ public class UserApiController {
 
         LOGGER.info("사용자 정보 요청: userNo = " + userEmail);
 
-        // 사용자 정보 조회
-        return userNo;
+        // UserDTO로 변환해서 반환
+        return new UserDto(
+                user.getUserNo(),
+                user.getUserName(),
+                user.getUserNickname(),
+                user.getUserEmail(),
+                user.getUserImage(),
+                user.getUserLike()
+        );
     }
 
 
