@@ -1,16 +1,15 @@
 package com.songsong.v3.user.dto;
 
+
 import com.songsong.v3.user.entity.User;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
+import lombok.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
+import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class UserDto {
 
     private int userNo;
@@ -19,7 +18,7 @@ public class UserDto {
     private String userPassword;
     private String userEmail;
     private String userImage;
-    private Date userRegisterDate;
+    private LocalDateTime userRegisterDate;
     private int userLike;
 
     private List<UserCategoryDto> userCategoryDtoList = new ArrayList<>();

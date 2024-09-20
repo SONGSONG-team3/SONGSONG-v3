@@ -2,14 +2,16 @@ package com.songsong.v3.user.entity;
 
 import com.songsong.v3.playlist.entity.Playlist;
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="user")
+@Builder
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")
@@ -39,10 +42,13 @@ public class User {
     private String userImage;
 
     @Column(name = "user_register_date")
-    private Date userRegisterDate;
+    private LocalDateTime userRegisterDate;
 
     @Column(name = "user_like")
     private int userLike;
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @OneToMany(mappedBy = "user")
     private List<Playlist> playlists = new ArrayList<>();
