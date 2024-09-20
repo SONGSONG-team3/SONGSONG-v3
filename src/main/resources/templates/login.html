@@ -99,6 +99,7 @@
 
         if (data.success) {
             // 토큰 저장 프로세스 추가
+            sessionStorage.setItem("authToken", data.token);
             window.location.href = "/";
         } else {
             alert("이메일 또는 비밀번호가 올바르지 않습니다.");
