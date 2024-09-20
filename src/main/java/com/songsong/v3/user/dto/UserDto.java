@@ -3,6 +3,11 @@ package com.songsong.v3.user.dto;
 import com.songsong.v3.user.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -11,9 +16,13 @@ public class UserDto {
     private int userNo;
     private String userName;
     private String userNickname;
+    private String userPassword;
     private String userEmail;
     private String userImage;
+    private Date userRegisterDate;
     private int userLike;
+
+    private List<UserCategoryDto> userCategoryDtoList = new ArrayList<>();
 
     public UserDto(int userNo, String userName, String userNickname, String userEmail, String userImage, int userLike) {
         this.userNo = userNo;

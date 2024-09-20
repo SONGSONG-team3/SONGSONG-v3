@@ -1,9 +1,13 @@
 package com.songsong.v3.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user_category")
+@Setter
+@Getter
 public class UserCategory {
 
     @Id
