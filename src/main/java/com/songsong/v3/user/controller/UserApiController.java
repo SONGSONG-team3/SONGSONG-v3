@@ -1,7 +1,10 @@
 package com.songsong.v3.user.controller;
 
+import com.songsong.v3.common.JwtTokenProvider;
 import com.songsong.v3.user.dto.UserDto;
 import com.songsong.v3.user.dto.UserResultDto;
+import com.songsong.v3.user.entity.User;
+import com.songsong.v3.user.repository.UserRepository;
 import com.songsong.v3.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ public class UserApiController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserApiController.class);
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     // 1. 회원가입
     @PostMapping("/signup")
@@ -43,6 +48,24 @@ public class UserApiController {
         }
         return userLoginResultDto;
     }
+
+    @GetMapping("/me")
+    public int getUserInfo(@RequestHeader("Authorization") String token) {
+        LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
+
+        String jwtToken = token.substring(7);
+
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+
+        User user = userRepository.findByUserEmail(userEmail);
+        int userNo = user.getUserNo();
+
+        LOGGER.info("사용자 정보 요청: userNo = " + userEmail);
+
+        // 사용자 정보 조회
+        return userNo;
+    }
+
 
     @GetMapping("/mypage")
     @ResponseBody

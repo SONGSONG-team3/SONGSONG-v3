@@ -47,7 +47,8 @@ public class SecurityConfig {
                                 "index.html",
                                 "/assets/**",
                                 "/api/v3/users/signup",
-                                "/api/v3/users/login"
+                                "/api/v3/users/login",
+                                "/api/v3/playlists/**"
 
                                 ).permitAll()
 

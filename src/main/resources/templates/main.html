@@ -149,47 +149,79 @@
     // 로그인 여부 확인 및 로그인된 유저 정보 가져오기
     document.addEventListener("DOMContentLoaded", async function() {
         try {
-            const response = await fetch('/api/user-info');  // 로그인한 유저 정보 가져오기
-            if (response.ok) {
-                const userDto = await response.json();
-                if (userDto) {
-                    // 로그인 상태일 때
-                    document.getElementById("user-info").innerHTML = `
-                        <li class="nav-item">
-                            <span class="nav-link">${userDto.userName}님</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/myplaylist">My 플레이리스트</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">My 페이지</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">로그아웃</a>
-                        </li>
-                    `;
+            const token = sessionStorage.getItem("authToken"); // JWT 토큰을 로컬 스토리지에서 가져옴
+            console.log("main.html에서 heager부분에서 token 출력 : ", token);
+            if (token) {
+                const response = await fetch('/me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`  // JWT 토큰을 Authorization 헤더에 포함
+                    }
+                });
+
+                if (response.ok) {
+                    const userDto = await response.json();
+                    if (userDto) {
+                        // 로그인 상태일 때
+                        document.getElementById("user-info").innerHTML = `
+                            <li class="nav-item">
+                                <span class="nav-link">${userDto.userName}님</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/myplaylist">My 플레이리스트</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/mypage">My 페이지</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="logout">로그아웃</a>
+                            </li>
+                        `;
+
+                        // 로그아웃 처리
+                        document.getElementById("logout").addEventListener("click", function() {
+                            sessionStorage.removeItem("authToken");  // JWT 토큰 삭제
+                            window.location.href = "/pages/login";  // 로그인 페이지로 리다이렉트
+                        });
+                    }
+                } else {
+                    // 토큰이 유효하지 않은 경우 로그인 페이지로 이동
+                    handleNotLoggedIn();
                 }
             } else {
-                // 로그인하지 않은 경우
-                document.getElementById("user-info").innerHTML = `
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">로그인</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/signup">회원가입</a>
-                    </li>
-                `;
+                // 토큰이 없는 경우 로그인하지 않은 상태 처리
+                handleNotLoggedIn();
             }
         } catch (error) {
             console.error("로그인 정보 가져오기 오류:", error);
+            handleNotLoggedIn();
         }
     });
+
+    // 로그인하지 않은 경우 헤더 처리 함수
+    function handleNotLoggedIn() {
+        document.getElementById("user-info").innerHTML = `
+            <li class="nav-item">
+                <a class="nav-link" href="/login">로그인</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/signup">회원가입</a>
+            </li>
+        `;
+    }
 
     // 장르 선택 시 플레이리스트 가져오기
     async function showPlaylist(categoryId, page = 0, size = 15) {
         try {
             currentCategory = categoryId;  // 현재 카테고리 설정
-            const response = await fetch(`/api/v3/playlists/mainplaylists/${categoryId}?page=${page}&size=${size}`);
+
+            // 토큰이 있으면 헤더에 추가
+            const token = sessionStorage.getItem("authToken");
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+            const response = await fetch(`/api/v3/playlists/${categoryId}?page=${page}&size=${size}`, {
+                headers: headers  // 로그인 시 토큰 포함, 비로그인 시 빈 헤더
+            });
+
             const result = await response.json();
             const playlistContainer = document.querySelector('.playlist-container');
             playlistContainer.innerHTML = '';
