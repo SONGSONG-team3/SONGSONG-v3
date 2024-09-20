@@ -1,13 +1,15 @@
-package com.songsong.v3.user;
+package com.songsong.v3.user.entity;
 
-import com.songsong.v3.playlist.Playlist;
+import com.songsong.v3.playlist.entity.Playlist;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Data
 @Table(name="user")
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

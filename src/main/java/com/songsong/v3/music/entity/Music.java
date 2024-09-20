@@ -1,13 +1,15 @@
-package com.songsong.v3.music;
+package com.songsong.v3.music.entity;
 
-import com.songsong.v3.user.Category;
-import com.songsong.v3.playlist.Playlist;
+import com.songsong.v3.user.entity.Category;
+import com.songsong.v3.playlist.entity.Playlist;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "music")
 public class Music {
     @Id

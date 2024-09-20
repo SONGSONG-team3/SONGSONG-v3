@@ -1,8 +1,10 @@
-package com.songsong.v3.user;
+package com.songsong.v3.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "user_category")
 public class UserCategory {
 
@@ -18,6 +20,5 @@ public class UserCategory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
 }
 
