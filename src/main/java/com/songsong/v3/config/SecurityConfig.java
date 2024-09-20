@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 "/api/v3/users/signup",
                                 "/api/v3/users/login",
                                 "/api/v3/playlists/**",
+                                "/favicon.ico"
                                 ).permitAll()
 
                         .anyRequest().authenticated())
