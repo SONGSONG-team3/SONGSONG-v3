@@ -152,7 +152,7 @@
             const token = sessionStorage.getItem("authToken"); // JWT 토큰을 로컬 스토리지에서 가져옴
             console.log("main.html에서 heager부분에서 token 출력 : ", token);
             if (token) {
-                const response = await fetch('/me', {
+                const response = await fetch('/api/v3/users/info', {
                     headers: {
                         'Authorization': `Bearer ${token}`  // JWT 토큰을 Authorization 헤더에 포함
                     }
