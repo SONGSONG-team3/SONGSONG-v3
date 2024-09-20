@@ -5,7 +5,6 @@ import com.songsong.v3.user.dto.UserResultDto;
 import com.songsong.v3.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.songsong.v3.user.dto.UserLoginRequestDto;
 import com.songsong.v3.user.dto.UserLoginResultDto;

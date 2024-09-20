@@ -2,9 +2,7 @@ package com.songsong.v3.playlist.service;
 
 import com.songsong.v3.playlist.dto.PlaylistParamDto;
 import com.songsong.v3.playlist.dto.PlaylistResultDto;
-import com.songsong.v3.music.entity.Music;
 import com.songsong.v3.playlist.entity.Playlist;
-import com.songsong.v3.user.entity.User;
 
 import java.util.List;
 

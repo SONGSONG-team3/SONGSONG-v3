@@ -1,32 +1,24 @@
 package com.songsong.v3.playlist.controller;
 
-import com.songsong.v3.like.entity.UserLike;
-import com.songsong.v3.like.repository.LikeRepository;
+
 import com.songsong.v3.like.service.LikeService;
 import com.songsong.v3.music.entity.Music;
 import com.songsong.v3.music.service.MusicService;
-import com.songsong.v3.playlist.dto.PlaylistDto;
 import com.songsong.v3.playlist.entity.Playlist;
 import com.songsong.v3.playlist.service.PlaylistService;
 import com.songsong.v3.playlist.dto.PlaylistParamDto;
-
 import com.songsong.v3.playlist.dto.PlaylistResultDto;
 import com.songsong.v3.user.repository.CategoryRepository;
-import com.songsong.v3.playlist.service.PlaylistService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import com.songsong.v3.user.dto.UserDto;
 import com.songsong.v3.user.entity.Category;
 import com.songsong.v3.user.entity.User;
 import com.songsong.v3.user.entity.UserCategory;
 import com.songsong.v3.user.service.CategoryService;
 import com.songsong.v3.user.service.UserCategoryService;
 import com.songsong.v3.user.service.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.HashMap;
 
 import java.util.List;
@@ -46,7 +38,7 @@ public class PlaylistController {
     private final CategoryService categoryService;
     private final LikeService likeService;
 
-    @GetMapping("/mainplaylists/{categoryId}")
+    @GetMapping("/{categoryId}")
     public ResponseEntity<PlaylistResultDto> getPlaylistsByCategory(
             @PathVariable int categoryId,
             @RequestParam(defaultValue = "0") int page,
@@ -84,6 +76,8 @@ public class PlaylistController {
         // 결과 반환
         return ResponseEntity.ok(playlistResultDto);
     }
+
+    // 내 플레이리스트 조회
     @GetMapping("/myplaylist/{userNo}")
     public ResponseEntity<Map<String, Object>> getMyPlaylists(@PathVariable("userNo") int userNo) {
         List<Playlist> myplaylists = playlistService.findByUserUserNo(userNo);
@@ -104,13 +98,15 @@ public class PlaylistController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/deleteMusicFromPlaylist")
+    // 내 플레이리스트 음악 삭제
+    @DeleteMapping("/")
     public ResponseEntity<String> deleteMusicFromPlaylist(@RequestParam("userNo") int userNo, @RequestParam("musicId") int musicId) {
         playlistService.deleteMusicFromPlaylist(userNo, musicId);
         return ResponseEntity.ok("음악이 삭제되었습니다.");
     }
 
-    @PostMapping("/addMusic")
+    // 내 플레이리스트 음악 추가
+    @PostMapping("/my")
     public ResponseEntity<String> addMusicToPlaylist(
             @RequestParam("songTitle") String songTitle,
             @RequestParam("artist") String artist,
@@ -135,6 +131,7 @@ public class PlaylistController {
         return ResponseEntity.ok("음악이 추가되었습니다.");
     }
 
+    // 다른 사용자 플레이리스트 조회
     @GetMapping("/otherplaylist/{userNo}")
     public ResponseEntity<Map<String, Object>> getOtherPlaylists(@PathVariable("userNo") int userNo) {
         List<Playlist> otherplaylists = playlistService.findByUserUserNo(userNo);
@@ -159,7 +156,8 @@ public class PlaylistController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/toggleLike")
+    // 플레이리스트 좋아요
+    @PostMapping("/like")
     public ResponseEntity<String> toggleLike(@RequestParam int userNo) {
         User fromUser = userService.findByUserNo(1); // 로그인한 사용자(테스트용)
         User toUser = userService.findByUserNo(userNo);
@@ -175,7 +173,8 @@ public class PlaylistController {
         }
     }
 
-    @PostMapping("/addMusicToPlaylist")
+    // 다른 사용자 플레이리스트에서 음악 추가
+    @PostMapping("/other")
     public ResponseEntity<String> addMusicToPlaylist(@RequestParam int userNo, @RequestParam int musicId) {
         User loginUser = userService.findByUserNo(1); // 임시 로그인 유저
 
