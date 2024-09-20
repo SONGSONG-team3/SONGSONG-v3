@@ -1,7 +1,7 @@
 package com.songsong.v3.common;
 
 import com.songsong.v3.user.dto.UserLoginRequestDto;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.SignatureException;
 import java.util.Date;
+
+
 
 @Component
 @RequiredArgsConstructor
@@ -64,13 +67,21 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         LOGGER.info("[JwtTokenProvider validateToken] 토큰 유효성 체크 시작");
         try {
-            return !Jwts.parser()
+            boolean isValid = !Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(token).getPayload()
                     .getExpiration().before(new Date());
+
+            if (isValid) {
+                LOGGER.info("[JwtTokenProvider validateToken] 토큰 유효성 검사 성공");
+            } else {
+                LOGGER.info("[JwtTokenProvider validateToken] 토큰이 만료되었거나 유효하지 않음");
+            }
+
+            return isValid;
         } catch (Exception e) {
-            LOGGER.info("[JwtTokenProvider validateToken] 토큰 유효성 체크 예외 발생");
+            LOGGER.info("[JwtTokenProvider validateToken] 토큰 유효성 체크 예외 발생: " + e.getMessage());
             return false;
         }
     }
