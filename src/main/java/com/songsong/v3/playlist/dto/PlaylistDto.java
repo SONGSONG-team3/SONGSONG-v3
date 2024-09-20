@@ -1,5 +1,4 @@
 package com.songsong.v3.playlist.dto;
-
 import com.songsong.v3.playlist.entity.Playlist;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PlaylistDto {
-
     private int userNo;
     private int musicId;
     private boolean sameUser;
@@ -27,5 +25,4 @@ public class PlaylistDto {
                 false
         );
     }
-
 }
