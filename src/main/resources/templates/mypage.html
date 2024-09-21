@@ -227,7 +227,7 @@
       const token = sessionStorage.getItem("authToken"); // JWT 토큰을 로컬 스토리지에서 가져옴
 
       let response = await fetch('/api/v3/users/mypage/update', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -250,7 +250,7 @@
       const token = sessionStorage.getItem("authToken"); // JWT 토큰을 로컬 스토리지에서 가져옴
 
       let response = await fetch('/api/v3/users/mypage/updatecate', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`  ,
@@ -310,7 +310,7 @@
       document.querySelector("#navName").innerHTML = userDto.userName + "님";
       document.querySelector("#name").value = userDto.userName;
       document.querySelector("#email").value = userDto.userEmail;
-      document.querySelector("#password").value = userDto.userPassword;
+      // document.querySelector("#password").value = userDto.userPassword;
       document.querySelector("#nickname").value = userDto.userNickname;
     }
 

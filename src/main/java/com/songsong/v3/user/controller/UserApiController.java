@@ -92,13 +92,12 @@ public class UserApiController {
         return userService.detailMypage(userNo);
     }
 
-    @PostMapping("/mypage/update")
+    @PutMapping("/mypage/update")
     @ResponseBody
     public UserResultDto updateUserMypage(@RequestBody UserDto userDto, @RequestHeader("Authorization") String token ) {
         LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
 
         String jwtToken = token.substring(7);
-
         String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
 
         User user = userRepository.findByUserEmail(userEmail);
@@ -109,13 +108,12 @@ public class UserApiController {
         return userService.updateUserMypage(userDto);
     }
 
-    @PostMapping("/mypage/updatecate")
+    @PutMapping("/mypage/updatecate")
     @ResponseBody
     public UserResultDto updateUserCategory(@RequestBody List<Integer> categoryIds, @RequestHeader("Authorization") String token) {
         LOGGER.info("사용자 정보 요청: 토큰 검증 시작");
 
         String jwtToken = token.substring(7);
-
         String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
 
         User user = userRepository.findByUserEmail(userEmail);
