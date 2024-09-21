@@ -212,9 +212,13 @@ public class UserService {
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
 
-                // 기본적인 사용자 정보 업데이트
-                // 비밀번호 , 닉네임 수정 가능
-                user.setUserPassword(userDto.getUserPassword());
+                // 기본적인 사용자 정보 업데이트 : 비밀번호 , 닉네임 수정
+                // 비밀번호 인코딩 후 업데이트
+                if (userDto.getUserPassword() != null && !userDto.getUserPassword().isEmpty()) {
+                    String encodedPassword = bCryptPasswordEncoder.encode(userDto.getUserPassword());
+                    user.setUserPassword(encodedPassword);
+                }
+
                 user.setUserNickname(userDto.getUserNickname());
 
                 userRepository.save(user);
