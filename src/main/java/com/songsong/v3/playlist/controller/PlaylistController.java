@@ -3,13 +3,17 @@ package com.songsong.v3.playlist.controller;
 
 import com.songsong.v3.common.JwtTokenProvider;
 import com.songsong.v3.like.service.LikeService;
+import com.songsong.v3.music.dto.MusicDto;
 import com.songsong.v3.music.entity.Music;
 import com.songsong.v3.music.service.MusicService;
+import com.songsong.v3.playlist.dto.PlaylistDto;
 import com.songsong.v3.playlist.entity.Playlist;
 import com.songsong.v3.playlist.service.PlaylistService;
 import com.songsong.v3.playlist.dto.PlaylistParamDto;
 import com.songsong.v3.playlist.dto.PlaylistResultDto;
 import com.songsong.v3.user.controller.UserApiController;
+import com.songsong.v3.user.dto.CategoryDto;
+import com.songsong.v3.user.dto.UserDto;
 import com.songsong.v3.user.repository.CategoryRepository;
 import com.songsong.v3.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -83,29 +87,73 @@ public class PlaylistController {
     }
 
     // 내 플레이리스트 조회
-    @GetMapping("/myplaylist/{userNo}")
-    public ResponseEntity<Map<String, Object>> getMyPlaylists(@PathVariable("userNo") int userNo) {
-        List<Playlist> myplaylists = playlistService.findByUserUserNo(userNo);
-        List<UserCategory> userCategories = userCategoryService.findByUserNo(userNo);
-        List<Category> categories = userCategories.stream()
-                .map(UserCategory::getCategory)
-                .collect(Collectors.toList());
+    @GetMapping("/myplaylist")
+    public ResponseEntity<Map<String, Object>> getMyPlaylists(@RequestHeader("Authorization") String token) {
+        LOGGER.info("사용자 플레이리스트 요청: 토큰 검증 시작");
 
-        User user = userService.findByUserNo(userNo);
+        String jwtToken = token.substring(7);
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+
+        User user = userRepository.findByUserEmail(userEmail);
+        UserDto userDto = new UserDto();
+        userDto.setUserNo(user.getUserNo());
+        userDto.setUserName(user.getUserName());
+        userDto.setUserNickname(user.getUserNickname());
+        userDto.setUserEmail(user.getUserEmail());
+        userDto.setUserImage(String.valueOf(user.getUserImage()));
+        userDto.setUserLike(user.getUserLike());
+
+        int userNo = user.getUserNo();
+
+        List<Playlist> myplaylists = playlistService.findByUserUserNo(userNo);
+        List<PlaylistDto> playlistDtos = myplaylists.stream()
+                .map(playlist -> {
+                    Music music = playlist.getMusic(); // Music 정보를 가져옴
+                    MusicDto musicDto = new MusicDto();
+                    if (music != null) {
+                        musicDto.setMusicId(music.getMusicId());
+                        musicDto.setMusicName(music.getMusicName());
+                        musicDto.setMusicArtist(music.getMusicArtist());
+                        musicDto.setMusicLink(music.getMusicLink());
+                        musicDto.setCategoryDto(new CategoryDto(music.getCategory().getCategoryId(), music.getCategory().getCategoryName()));
+                    }
+
+                    PlaylistDto dto = new PlaylistDto();
+                    dto.setUserNo(userNo);
+                    dto.setMusic(musicDto); // MusicDto 설정
+                    return dto;
+                }).collect(Collectors.toList());
+
+        List<UserCategory> userCategories = userCategoryService.findByUserNo(userNo);
+        List<CategoryDto> categoryDtos = userCategories.stream()
+                .map(userCategory -> {
+                    Category category = userCategory.getCategory();
+                    return new CategoryDto(category.getCategoryId(), category.getCategoryName()); // DTO 변환
+                })
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("playlists", myplaylists);
-        response.put("categories", categories);
+        response.put("playlists", playlistDtos);
+        response.put("categories", categoryDtos);
+        response.put("user", userDto);
         response.put("userNo", userNo);
-        response.put("user", user);
         response.put("isPlaylistEmpty", myplaylists.isEmpty());
+
+        LOGGER.info("반환 데이터: " + response.toString());
 
         return ResponseEntity.ok(response);
     }
 
     // 내 플레이리스트 음악 삭제
-    @DeleteMapping("/")
-    public ResponseEntity<String> deleteMusicFromPlaylist(@RequestParam("userNo") int userNo, @RequestParam("musicId") int musicId) {
+    @DeleteMapping("/{musicId}") // musicId를 경로에서 가져옴
+    public ResponseEntity<String> deleteMusicFromPlaylist(
+            @PathVariable int musicId,
+            @RequestHeader("Authorization") String token) {
+        LOGGER.info("사용자 플레이리스트 음악 삭제 요청: 토큰 검증 시작");
+        String jwtToken = token.substring(7);
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+        User user = userRepository.findByUserEmail(userEmail);
+        int userNo = user.getUserNo();
         playlistService.deleteMusicFromPlaylist(userNo, musicId);
         return ResponseEntity.ok("음악이 삭제되었습니다.");
     }
@@ -113,23 +161,25 @@ public class PlaylistController {
     // 내 플레이리스트 음악 추가
     @PostMapping("/my")
     public ResponseEntity<String> addMusicToPlaylist(
-            @RequestParam("songTitle") String songTitle,
-            @RequestParam("artist") String artist,
-            @RequestParam("songLink") String songLink,
-            @RequestParam("category") int categoryId,
-            @RequestParam("userNo") int userNo
-    ) {
+            @RequestBody MusicDto musicDto,
+            @RequestHeader("Authorization") String token) {
+        LOGGER.info("사용자 플레이리스트 음악 추가 요청: 토큰 검증 시작");
+        LOGGER.info("musicDto: " + musicDto);
+        String jwtToken = token.substring(7); // "Bearer " 제거
+        String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
+        User user = userRepository.findByUserEmail(userEmail);
         Music music = new Music();
-        music.setMusicName(songTitle);
-        music.setMusicArtist(artist);
-        music.setMusicLink(songLink);
+        music.setMusicName(musicDto.getMusicName());
+        music.setMusicArtist(musicDto.getMusicArtist());
+        music.setMusicLink(musicDto.getMusicLink());
 
-        Category category = categoryService.findById(categoryId);
+        Category category = categoryService.findById(musicDto.getCategoryId());
+        System.out.println(musicDto.getCategoryId());
         music.setCategory(category);
         musicService.addMusic(music);
 
         Playlist playlist = new Playlist();
-        playlist.setUser(userService.findByUserNo(userNo));
+        playlist.setUser(user);
         playlist.setMusic(music);
         playlistService.save(playlist);
 

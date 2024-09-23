@@ -10,25 +10,20 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
-
         .navbar {
             margin-bottom: 20px;
             background-color: #43486E;
         }
-
         .navbar-nav .nav-link {
             color: #fff !important;
         }
-
         .navbar-brand img {
             height: 40px;
         }
-
         .profile-container {
             display: flex;
             padding: 20px;
         }
-
         .profile-info {
             margin-top: 10px;
             display: flex;
@@ -36,33 +31,27 @@
             padding-left: 30px;
             background-color: #fff;
         }
-
         .profile-icon {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             margin-right: 20px;
         }
-
         .profile-details h2 {
             margin: 0;
             font-size: 1.5em;
         }
-
         .profile-details {
             margin-left: 30px;
         }
-
         .profile-details p {
             margin: 5px 0;
         }
-
         .main-container {
             width: 80%;
             margin-left: 10%;
             margin-top: 80px;
         }
-
         .playlist-table {
             width: 100%;
             border-collapse: collapse;
@@ -70,14 +59,12 @@
             table-layout: fixed;
             border: none;
         }
-
         .playlist-table th,
         .playlist-table td {
             padding: 8px;
             text-align: left;
             border: none;
         }
-
         .playlist-table th {
             background-color: #f4f4f4;
             font-weight: bold;
@@ -86,36 +73,29 @@
             border-left: none;
             border-right: none;
         }
-
         .playlist-table th:nth-child(1),
         .playlist-table td:nth-child(1) {
             width: 10%;
         }
-
         .playlist-table th:nth-child(2),
         .playlist-table td:nth-child(2) {
             width: 27%;
         }
-
         .playlist-table th:nth-child(3),
         .playlist-table td:nth-child(3) {
             width: 27%;
         }
-
         .playlist-table th:nth-child(4),
         .playlist-table td:nth-child(4) {
             width: 27%;
         }
-
         .playlist-table tr:hover {
             background-color: #f1f1f1;
         }
-
         .playlist-table a {
             color: #007bff;
             text-decoration: none;
         }
-
         .action-button {
             background-color: #43486E;
             color: white;
@@ -126,17 +106,14 @@
             font-size: 14px;
             transition: background-color 0.3s;
         }
-
         .action-button:hover {
             background-color: #c82333;
         }
-
         .add-song-button-container {
             text-align: center;
             margin-top: 100px;
             margin-bottom: 10px;
         }
-
         .add-song-button {
             background-color: #74C1BA;
             color: #fff;
@@ -147,16 +124,13 @@
             cursor: pointer;
             font-size: 15px;
         }
-
         .add-song-button:hover {
             background-color: #5CFFD1;
         }
-
         .add-song-container {
             margin-top: 20px;
             text-align: center;
         }
-
         .add-song-form {
             display: none;
             margin: 0 auto;
@@ -166,7 +140,6 @@
             background-color: #f9f9f9;
             max-width: 1000px;
         }
-
         .form-row {
             display: flex;
             justify-content: space-between;
@@ -174,12 +147,10 @@
             gap: 10px;
             flex-wrap: nowrap; /* 항목들이 한 줄에 배치되도록 변경 */
         }
-
         .form-group {
             flex: 1;
             min-width: 100px; /* 각 항목의 최소 넓이 설정 */
         }
-
         .form-group input,
         .form-group select {
             display: block;
@@ -188,13 +159,11 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-
         .form-actions {
             margin-top: 10px;
             display: flex;
             justify-content: center;
         }
-
         .form-actions button {
             margin-right: 10px;
             padding: 8px 12px;
@@ -202,21 +171,17 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         .form-actions button[type="submit"] {
             background-color: #007bff;
             color: #fff;
         }
-
         .form-actions button[type="submit"]:hover {
             background-color: #0056b3;
         }
-
         .form-actions button[type="button"] {
             background-color: #6c757d;
             color: #fff;
         }
-
         .form-actions button[type="button"]:hover {
             background-color: #5a6268;
         }
@@ -232,7 +197,7 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <span class="nav-link" th:text="${user.userName} + '님'">유저 이름</span>
+                    <span class="nav-link" id="user_name">유저 이름</span>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/mypage">마이페이지</a>
@@ -244,22 +209,19 @@
         </div>
     </div>
 </nav>
-
 <div class="main-container">
     <!-- 프로필 -->
     <div class="profile-container">
         <div class="profile-info">
             <img src="/assets/img/goomba.jpg" class="profile-icon" alt="Profile Image">
             <div class="profile-details">
-                <h2><span th:text="${user.userNickname}">닉네임</span></h2>
-                <p>🎵<span th:text="${playlists.size()}"></span> ❤️<span th:text="${user.userLike}">0</span></p>
-                <p><span th:each="category : ${categories}" th:text="${category.categoryName} + ' '"></span></p>
+                <h2><span id="user_nickname">닉네임</span></h2>
+                <p>🎵<span id="song_count"></span> ❤️<span id="like_count">0</span></p>
+                <p><span id="user_category">카테고리</span></p>
             </div>
         </div>
     </div>
-
     <hr>
-
     <!-- 플레이리스트 -->
     <table class="playlist-table">
         <thead>
@@ -272,36 +234,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="playlist : ${playlists}">
-            <td th:text="${playlist.music.category.categoryName}">카테고리</td>
-            <td th:text="${playlist.music.musicName}">곡 제목</td>
-            <td th:text="${playlist.music.musicArtist}">가수</td>
-            <td>
-                <a th:href="@{${playlist.music.musicLink}}" th:text="${playlist.music.musicName}">곡 링크</a>
-            </td>
-            <td>
-                <!-- 삭제 버튼과 관련된 폼 -->
-                <form th:action="@{/api/v3/playlist/deleteMusicFromPlaylist}" method="post" onsubmit="return confirmDelete(event)">
-                    <input type="hidden" name="userNo" th:value="${userNo}" />
-                    <input type="hidden" name="musicId" th:value="${playlist.music.musicId}" />
-                    <button type="submit" class="action-button">삭제</button>
-                </form>
-            </td>
-        </tr>
         </tbody>
     </table>
-
     <!-- + 버튼 및 폼 -->
     <div class="add-song-container">
         <div class="add-song-button-container">
             <button class="add-song-button" onclick="toggleForm()">+</button>
         </div>
-
         <div class="add-song-form" id="addSongForm" style="display: none;">
             <h3>노래 추가</h3>
-            <form id="songForm" action="/api/v3/playlist/addMusic" method="post">
+            <form id="songForm" action="/api/v3/playlists/my" method="post">
                 <div class="form-row">
-
                     <div class="form-group">
                         <select id="category" name="category" required>
                             <option value="">카테고리 선택</option>
@@ -315,7 +258,6 @@
                             <option value="8">밴드</option>
                         </select>
                     </div>
-                    <input type="hidden" id="userNo" name="userNo" th:value="${userNo}">
                     <div class="form-group">
                         <input type="text" id="songTitle" name="songTitle" placeholder="곡 제목을 입력하세요" required>
                     </div>
@@ -333,28 +275,147 @@
             </form>
         </div>
     </div>
-
-    <script>
-        function toggleForm() {
-            let form = document.getElementById('addSongForm');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
+</div>
+<script>
+    function toggleForm() {
+        let form = document.getElementById('addSongForm');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
         }
-    </script>
-
-    <script>
-        function confirmDelete(event) {
-            if (!confirm("정말로 삭제하시겠습니까?")) {
-                event.preventDefault(); // 사용자가 취소를 선택하면 폼 제출을 막음
-                return false;
-            }
-
-            // 폼 제출을 계속 진행
-            return true;
+    }
+</script>
+<script>
+    function confirmDelete(event) {
+        if (!confirm("정말로 삭제하시겠습니까?")) {
+            event.preventDefault(); // 사용자가 취소를 선택하면 폼 제출을 막음
+            return false;
         }
-    </script>
+        // 폼 제출을 계속 진행
+        return true;
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        try {
+            const token = sessionStorage.getItem("authToken");
+            if (token) {
+                const response = await fetch('/api/v3/playlists/myplaylist', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.ok) {
+                    let data = await response.json();
+                    console.log("받은 데이터:", data);
+                    if (data) {
+                        // 유저 이름을 HTML 요소에 삽입
+                        document.querySelector("#user_name").innerText = data.user.userName+'님';
+                        document.querySelector("#user_nickname").innerText = data.user.userNickname;
+                        document.querySelector("#like_count").innerText = data.user.userLike;
+                        document.querySelector("#song_count").innerText = data.playlists.length;
+                        const categories = data.categories.map(category => category.categoryName).join(" ");
+                        document.querySelector("#user_category").innerText = categories;
+                        const playlistContainer = document.querySelector("tbody");
+                        data.playlists.forEach(playlist => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                    <td>${playlist.music.categoryDto.categoryName}</td>
+                                    <td>${playlist.music.musicName}</td>
+                                    <td>${playlist.music.musicArtist}</td>
+                                    <td>
+                                        <a href="${playlist.music.musicLink}">${playlist.music.musicName}</a>
+                                    </td>
+                                    <td>
+                                        <form onsubmit="return confirmDelete(event)">
+                                            <input type="hidden" name="userNo" value="${data.user.userNo}" />
+                                            <input type="hidden" name="musicId" value="${playlist.music.musicId}" />
+                                            <button type="submit" class="action-button">삭제</button>
+                                        </form>
+                                    </td>
+                                `;
+                            playlistContainer.appendChild(row);
+                        });
+                    }
+                } else {
+                    console.log("요청 실패");
+                }
+            }else{
+                //토큰이 없는 경우
+            }
+        } catch (error) {
+            console.log("오류 발생:", error);
+        }
+    });
+</script>
+<script>
+    function confirmDelete(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        const form = event.target; // 삭제 버튼이 포함된 폼
+        const musicId = form.querySelector('input[name="musicId"]').value;
+        const token = sessionStorage.getItem("authToken");
+        console.log("토큰:", token);
+        if (confirm("정말 삭제하시겠습니까?")) {
+            fetch(`/api/v3/playlists/${musicId}`, { // musicId를 URL에 포함
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+                // DELETE 요청에서는 보통 body를 사용하지 않음
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 삭제 후 UI에서 해당 행 제거
+                        alert("음악이 삭제되었습니다.");
+                        form.closest('tr').remove();
+                    } else {
+                        alert("삭제 실패");
+                    }
+                })
+                .catch(error => {
+                    console.error('삭제 중 오류 발생:', error);
+                    alert("삭제 도중 오류가 발생했습니다.");
+                });
+        }
+    }
+</script>
+<script>
+    function submitForm(event) {
+        event.preventDefault(); // 폼의 기본 제출 방지
+        const form = document.getElementById('songForm');
+        const formData = new FormData(form);
+        const songTitle = formData.get('songTitle');
+        const artist = formData.get('artist');
+        const songLink = formData.get('songLink');
+        const category = formData.get('category');
+        const categoryId = parseInt(category, 10);
+        const token = sessionStorage.getItem("authToken");
+        // PlaylistDto에 맞는 구조로 JSON 데이터 생성
+        const requestData = { musicName: songTitle, musicArtist: artist, musicLink: songLink, categoryId: categoryId };
+        console.log("토큰:", token);
+        console.log("전송 데이터:", requestData);
+        fetch('/api/v3/playlists/my', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`, // 토큰 추가
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData) // PlaylistDto에 맞게 데이터를 직렬화하여 전송
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('음악이 성공적으로 추가되었습니다.');
+                    toggleForm(); // 폼 닫기
+                } else {
+                    alert('음악 추가 실패');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    // 폼 제출 시 JavaScript 함수를 호출하도록 연결
+    document.getElementById('songForm').addEventListener('submit', submitForm);
+</script>
 </body>
 </html>
