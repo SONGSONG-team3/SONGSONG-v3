@@ -25,10 +25,12 @@ public class Playlist {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
+    @ToString.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "music_id")
+    @ToString.Exclude
     private Music music;
 
 }

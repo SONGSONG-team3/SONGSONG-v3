@@ -51,9 +51,11 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Playlist> playlists = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<UserCategory> userCategories = new ArrayList<>();
 
 }

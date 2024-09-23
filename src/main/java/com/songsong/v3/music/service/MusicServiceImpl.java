@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 public class MusicServiceImpl implements MusicService{
 
     private final MusicRepository musicRepository;
-    private final PlaylistRepository playlistRepository;
 
-    public MusicServiceImpl(MusicRepository musicRepository, PlaylistRepository playlistRepository) {
+    public MusicServiceImpl(MusicRepository musicRepository) {
         this.musicRepository = musicRepository;
-        this.playlistRepository = playlistRepository;
     }
     @Override
     public void addMusic(Music music) {

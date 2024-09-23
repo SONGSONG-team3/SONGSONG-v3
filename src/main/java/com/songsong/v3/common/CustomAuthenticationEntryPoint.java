@@ -19,7 +19,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        LOGGER.info("인증 실패");
+//        LOGGER.info("인증 실패");
+        LOGGER.info("인증 실패: {}", authException.getMessage());
 
         EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
         entryPointErrorResponse.setMsg("인증이 실패하였습니다.");

@@ -8,6 +8,7 @@ import com.songsong.v3.common.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,7 +47,7 @@ public class SecurityConfig {
                                 "/signup",
                                 "/mypage",
                                 "/myplaylist",
-                                "/otherplaylist",
+                                "/otherplaylist/**",
                                 "index.html",
                                 "/assets/**",
                                 "/api/v3/users/signup",
@@ -54,7 +55,7 @@ public class SecurityConfig {
                                 "/api/v3/playlists/**",
                                 "/favicon.ico"
                                 ).permitAll()
-
+//                        .requestMatchers(HttpMethod.DELETE, "/api/v3/playlists").authenticated() // DELETE 요청은 인증 필요
                         .anyRequest().authenticated())
 
                 // JWT를 통한 인증/인가를 위해서 세션을 STATELESS 상태로 설정
