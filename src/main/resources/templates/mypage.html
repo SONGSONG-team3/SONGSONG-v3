@@ -16,7 +16,7 @@
   <!-- 상단 네비게이션 -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/static">
+      <a class="navbar-brand" href="/">
         <img src="/assets/img/songsong_color.jpg" alt="logo" />
       </a>
       <div class="collapse navbar-collapse">
@@ -28,7 +28,7 @@
             <a class="nav-link" href="/myplaylist">My 플레이리스트</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/auth/logout">로그아웃</a>
+            <a class="nav-link" href="#" id="logoutBtn">로그아웃</a>
           </li>
         </ul>
       </div>
@@ -337,6 +337,16 @@
       });
     });
   }
+
+  // 로그아웃
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    sessionStorage.removeItem('authToken'); // JWT 토큰 제거
+    alertify.success("로그아웃 되었습니다.");
+    setTimeout(function () {
+      window.location.href = "/login";
+    }, 1000);
+  });
+
 </script>
 </body>
 </html>

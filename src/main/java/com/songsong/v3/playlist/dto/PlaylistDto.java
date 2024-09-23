@@ -2,6 +2,7 @@ package com.songsong.v3.playlist.dto;
 
 
 import com.songsong.v3.music.dto.MusicDto;
+import com.songsong.v3.playlist.entity.Playlist;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

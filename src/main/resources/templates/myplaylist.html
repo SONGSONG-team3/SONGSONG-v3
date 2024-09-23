@@ -10,25 +10,20 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
-
         .navbar {
             margin-bottom: 20px;
             background-color: #43486E;
         }
-
         .navbar-nav .nav-link {
             color: #fff !important;
         }
-
         .navbar-brand img {
             height: 40px;
         }
-
         .profile-container {
             display: flex;
             padding: 20px;
         }
-
         .profile-info {
             margin-top: 10px;
             display: flex;
@@ -36,33 +31,27 @@
             padding-left: 30px;
             background-color: #fff;
         }
-
         .profile-icon {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             margin-right: 20px;
         }
-
         .profile-details h2 {
             margin: 0;
             font-size: 1.5em;
         }
-
         .profile-details {
             margin-left: 30px;
         }
-
         .profile-details p {
             margin: 5px 0;
         }
-
         .main-container {
             width: 80%;
             margin-left: 10%;
             margin-top: 80px;
         }
-
         .playlist-table {
             width: 100%;
             border-collapse: collapse;
@@ -70,14 +59,12 @@
             table-layout: fixed;
             border: none;
         }
-
         .playlist-table th,
         .playlist-table td {
             padding: 8px;
             text-align: left;
             border: none;
         }
-
         .playlist-table th {
             background-color: #f4f4f4;
             font-weight: bold;
@@ -86,7 +73,6 @@
             border-left: none;
             border-right: none;
         }
-
         .playlist-table th:nth-child(1),
         .playlist-table td:nth-child(1) {
             width: 10%;
@@ -272,10 +258,8 @@
         </tr>
         </thead>
         <tbody>
-
         </tbody>
     </table>
-
     <!-- + 버튼 및 폼 -->
     <div class="add-song-container">
         <div class="add-song-button-container">
@@ -298,6 +282,7 @@
                             <option value="8">밴드</option>
                         </select>
                     </div>
+                    <input type="hidden" id="userNo" name="userNo" th:value="${userNo}">
                     <div class="form-group">
                         <input type="text" id="songTitle" name="songTitle" placeholder="곡 제목을 입력하세요" required>
                     </div>
@@ -316,55 +301,51 @@
         </div>
     </div>
 </div>
-    <script>
-        function toggleForm() {
-            let form = document.getElementById('addSongForm');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
+<script>
+    function toggleForm() {
+        let form = document.getElementById('addSongForm');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
         }
-    </script>
-
-    <script>
-        function confirmDelete(event) {
-            if (!confirm("정말로 삭제하시겠습니까?")) {
-                event.preventDefault(); // 사용자가 취소를 선택하면 폼 제출을 막음
-                return false;
-            }
-
-            // 폼 제출을 계속 진행
-            return true;
+    }
+</script>
+<script>
+    function confirmDelete(event) {
+        if (!confirm("정말로 삭제하시겠습니까?")) {
+            event.preventDefault(); // 사용자가 취소를 선택하면 폼 제출을 막음
+            return false;
         }
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            try {
-                const token = sessionStorage.getItem("authToken");
-                if (token) {
-                    const response = await fetch('/api/v3/playlists/myplaylist', {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (response.ok) {
-                        let data = await response.json();
-                        console.log("받은 데이터:", data);
-                        if (data) {
-                            // 유저 이름을 HTML 요소에 삽입
-                            document.querySelector("#user_name").innerText = data.user.userName+'님';
-                            document.querySelector("#user_nickname").innerText = data.user.userNickname;
-                            document.querySelector("#like_count").innerText = data.user.userLike;
-                            document.querySelector("#song_count").innerText = data.playlists.length;
-                            const categories = data.categories.map(category => category.categoryName).join(" ");
-                            document.querySelector("#user_category").innerText = categories;
-
-                            const playlistContainer = document.querySelector("tbody");
-                            data.playlists.forEach(playlist => {
-                                const row = document.createElement("tr");
-                                row.innerHTML = `
+        // 폼 제출을 계속 진행
+        return true;
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        try {
+            const token = sessionStorage.getItem("authToken");
+            if (token) {
+                const response = await fetch('/api/v3/playlists/myplaylist', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.ok) {
+                    let data = await response.json();
+                    console.log("받은 데이터:", data);
+                    if (data) {
+                        // 유저 이름을 HTML 요소에 삽입
+                        document.querySelector("#user_name").innerText = data.user.userName+'님';
+                        document.querySelector("#user_nickname").innerText = data.user.userNickname;
+                        document.querySelector("#like_count").innerText = data.user.userLike;
+                        document.querySelector("#song_count").innerText = data.playlists.length;
+                        const categories = data.categories.map(category => category.categoryName).join(" ");
+                        document.querySelector("#user_category").innerText = categories;
+                        const playlistContainer = document.querySelector("tbody");
+                        data.playlists.forEach(playlist => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
                                     <td>${playlist.music.categoryDto.categoryName}</td>
                                     <td>${playlist.music.musicName}</td>
                                     <td>${playlist.music.musicArtist}</td>
@@ -379,95 +360,87 @@
                                         </form>
                                     </td>
                                 `;
-                                playlistContainer.appendChild(row);
-                            });
-                        }
-                    } else {
-                        console.log("요청 실패");
+                            playlistContainer.appendChild(row);
+                        });
                     }
-                }else{
-                    //토큰이 없는 경우
+                } else {
+                    console.log("요청 실패");
                 }
-            } catch (error) {
-                console.log("오류 발생:", error);
+            }else{
+                //토큰이 없는 경우
             }
-
-        });
-    </script>
-
-    <script>
-        function confirmDelete(event) {
-            event.preventDefault(); // 기본 폼 제출 방지
-            const form = event.target; // 삭제 버튼이 포함된 폼
-            const musicId = form.querySelector('input[name="musicId"]').value;
-            const token = sessionStorage.getItem("authToken");
-            console.log("토큰:", token);
-            if (confirm("정말 삭제하시겠습니까?")) {
-                fetch(`/api/v3/playlists/${musicId}`, { // musicId를 URL에 포함
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                    // DELETE 요청에서는 보통 body를 사용하지 않음
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            // 삭제 후 UI에서 해당 행 제거
-                            alert("음악이 삭제되었습니다.");
-                            form.closest('tr').remove();
-                        } else {
-                            alert("삭제 실패");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('삭제 중 오류 발생:', error);
-                        alert("삭제 도중 오류가 발생했습니다.");
-                    });
-            }
+        } catch (error) {
+            console.log("오류 발생:", error);
         }
-    </script>
-
-    <script>
-        function submitForm(event) {
-            event.preventDefault(); // 폼의 기본 제출 방지
-
-            const form = document.getElementById('songForm');
-            const formData = new FormData(form);
-
-            const songTitle = formData.get('songTitle');
-            const artist = formData.get('artist');
-            const songLink = formData.get('songLink');
-            const category = formData.get('category');
-            const categoryId = parseInt(category, 10);
-            const token = sessionStorage.getItem("authToken");
-            // PlaylistDto에 맞는 구조로 JSON 데이터 생성
-            const requestData = { musicName: songTitle, musicArtist: artist, musicLink: songLink, categoryId: categoryId };
-
-            console.log("토큰:", token);
-            console.log("전송 데이터:", requestData);
-            fetch('/api/v3/playlists/my', {
-                method: 'POST',
+    });
+</script>
+<script>
+    function confirmDelete(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        const form = event.target; // 삭제 버튼이 포함된 폼
+        const musicId = form.querySelector('input[name="musicId"]').value;
+        const token = sessionStorage.getItem("authToken");
+        console.log("토큰:", token);
+        if (confirm("정말 삭제하시겠습니까?")) {
+            fetch(`/api/v3/playlists/${musicId}`, { // musicId를 URL에 포함
+                method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`, // 토큰 추가
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData) // PlaylistDto에 맞게 데이터를 직렬화하여 전송
+                }
+                // DELETE 요청에서는 보통 body를 사용하지 않음
             })
                 .then(response => {
                     if (response.ok) {
-                        alert('음악이 성공적으로 추가되었습니다.');
-                        toggleForm(); // 폼 닫기
+                        // 삭제 후 UI에서 해당 행 제거
+                        alert("음악이 삭제되었습니다.");
+                        form.closest('tr').remove();
                     } else {
-                        alert('음악 추가 실패');
+                        alert("삭제 실패");
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('삭제 중 오류 발생:', error);
+                    alert("삭제 도중 오류가 발생했습니다.");
+                });
         }
-
-        // 폼 제출 시 JavaScript 함수를 호출하도록 연결
-        document.getElementById('songForm').addEventListener('submit', submitForm);
-    </script>
-
+    }
+</script>
+<script>
+    function submitForm(event) {
+        event.preventDefault(); // 폼의 기본 제출 방지
+        const form = document.getElementById('songForm');
+        const formData = new FormData(form);
+        const songTitle = formData.get('songTitle');
+        const artist = formData.get('artist');
+        const songLink = formData.get('songLink');
+        const category = formData.get('category');
+        const categoryId = parseInt(category, 10);
+        const token = sessionStorage.getItem("authToken");
+        // PlaylistDto에 맞는 구조로 JSON 데이터 생성
+        const requestData = { musicName: songTitle, musicArtist: artist, musicLink: songLink, categoryId: categoryId };
+        console.log("토큰:", token);
+        console.log("전송 데이터:", requestData);
+        fetch('/api/v3/playlists/my', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`, // 토큰 추가
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData) // PlaylistDto에 맞게 데이터를 직렬화하여 전송
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('음악이 성공적으로 추가되었습니다.');
+                    toggleForm(); // 폼 닫기
+                } else {
+                    alert('음악 추가 실패');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    // 폼 제출 시 JavaScript 함수를 호출하도록 연결
+    document.getElementById('songForm').addEventListener('submit', submitForm);
+</script>
 </body>
 </html>

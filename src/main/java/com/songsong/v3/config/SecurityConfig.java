@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/api/v3/playlists/**",
                                 "/favicon.ico"
                                 ).permitAll()
-//                        .requestMatchers(HttpMethod.DELETE, "/api/v3/playlists").authenticated() // DELETE 요청은 인증 필요
+
                         .anyRequest().authenticated())
 
                 // JWT를 통한 인증/인가를 위해서 세션을 STATELESS 상태로 설정
