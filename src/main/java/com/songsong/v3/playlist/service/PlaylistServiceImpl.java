@@ -13,6 +13,7 @@ import com.songsong.v3.user.dto.UserDto;
 import com.songsong.v3.user.entity.User;
 import com.songsong.v3.user.repository.UserRepository;
 import com.songsong.v3.user.repository.CategoryRepository;
+import com.songsong.v3.user.repository.UserCategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +21,7 @@ import lombok.RequiredArgsConstructor;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +30,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final UserCategoryRepository usercategoryRepository;
     private final MusicService musicService;
 
     @Override
@@ -44,21 +42,57 @@ public class PlaylistServiceImpl implements PlaylistService {
         Pageable pageable = PageRequest.of(playlistParamDto.getOffset() / playlistParamDto.getLimit(), playlistParamDto.getLimit());
 
         // 페이지네이션이 적용된 Playlist 조회
-        Page<Playlist> playlistPage = playlistRepository.findByMusic_Category_CategoryId(playlistParamDto.getSearchCategory(), pageable);
+        //Page<Playlist> playlistPage = playlistRepository.findByMusic_Category_CategoryId(playlistParamDto.getSearchCategory(), pageable);
+
+        // categoryId로 userNo 목록을 가져옴
+        List<Integer> userNos = usercategoryRepository.findUserNoByCategoryId(playlistParamDto.getSearchCategory());
+
+        System.out.println("카테고리 ID " + playlistParamDto.getSearchCategory() + "에 해당하는 유저 No: " + userNos);
+
+        // userNo 목록으로 Playlist를 페이지 형태로 가져옴
+        Page<Playlist> playlistPage = playlistRepository.findDistinctPlaylistsByUserNos(userNos, pageable);
+
+
+        System.out.println("전체 요소 수: " + playlistPage.getTotalElements());
+        System.out.println("전체 페이지 수: " + playlistPage.getTotalPages());
+        System.out.println("현재 페이지의 요소 수: " + playlistPage.getNumberOfElements());
+        System.out.println("현재 페이지 번호: " + playlistPage.getNumber());
+        System.out.println("페이지 크기: " + playlistPage.getSize());
+
+// 각 Playlist 객체 정보 출력
+        for (Playlist playlist : playlistPage.getContent()) {
+            System.out.println("플레이리스트 ID: " + playlist.getPlaylistId());
+            System.out.println("사용자 ID: " + playlist.getUser().getUserNo());
+            System.out.println("음악 ID: " + playlist.getMusic().getMusicId());
+        }
+
 
         // 전체 플레이리스트 개수
-        int totalPlaylistsCount = (int) playlistPage.getTotalElements();
-        int totalPages = playlistPage.getTotalPages();
+        int totalPlaylistsCount = userNos.size();
+        int totalPages = (int) Math.ceil((double) totalPlaylistsCount / playlistParamDto.getLimit());
 
         System.out.println(totalPlaylistsCount);
         System.out.println(totalPages);
 
         // PlaylistDto 변환
+        Set<Integer> processedUserNos = new HashSet<>();  // 처리된 사용자 ID를 저장할 Set
+
         for (Playlist playlist : playlistPage.getContent()) {
+            int userNo = playlist.getUser().getUserNo();
+
+            // 이미 처리된 사용자라면 건너뜀
+            if (processedUserNos.contains(userNo)) {
+                continue;
+            }
+
+            // 사용자 ID를 Set에 추가하여 중복 처리 방지
+            processedUserNos.add(userNo);
+
+            // PlaylistDto로 변환하여 리스트에 추가
             PlaylistDto dto = new PlaylistDto();
-            dto.setUserNo(playlist.getUser().getUserNo());
+            dto.setUserNo(userNo);
             dto.setMusicId(playlist.getMusic().getMusicId());
-            dto.setSameUser(playlist.getUser().getUserNo() == playlistParamDto.getUserNo());
+            dto.setSameUser(userNo == playlistParamDto.getUserNo());
             playlistDtoList.add(dto);
         }
 
