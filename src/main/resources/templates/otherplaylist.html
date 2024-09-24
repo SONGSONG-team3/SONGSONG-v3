@@ -257,7 +257,7 @@
                     <a class="nav-link" href="/mypage">마이페이지</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/auth/logout">로그아웃</a>
+                    <a class="nav-link" href="#" id="logoutBtn">로그아웃</a>
                 </li>
             </ul>
         </div>
@@ -447,6 +447,16 @@
                 console.log("오류 발생:", error);
             }
 
+        });
+    </script>
+
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            sessionStorage.removeItem('authToken'); // JWT 토큰 제거
+            alert("로그아웃 되었습니다.");
+            setTimeout(function () {
+                window.location.href = "/login";
+            }, 1000);
         });
     </script>
 </body>
