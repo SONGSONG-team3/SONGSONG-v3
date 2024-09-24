@@ -280,4 +280,7 @@ public class UserService {
         return userRepository.findByUserNo(userNo);
     }
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

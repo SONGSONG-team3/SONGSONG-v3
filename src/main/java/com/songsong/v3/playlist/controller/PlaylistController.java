@@ -264,10 +264,14 @@ public class PlaylistController {
 
         if (isLiked) {
             likeService.deleteByUserFromAndUserTo(fromUser, toUser);
+            toUser.setUserLike(toUser.getUserLike() - 1);
+            userService.save(toUser);
             response.put("message", "좋아요가 취소되었습니다.");
             response.put("isLiked", false);
         } else {
             likeService.save(fromUser, toUser);
+            toUser.setUserLike(toUser.getUserLike() + 1);
+            userService.save(toUser);
             response.put("message", "좋아요가 추가되었습니다.");
             response.put("isLiked", true);
         }
