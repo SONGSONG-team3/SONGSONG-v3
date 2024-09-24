@@ -15,8 +15,10 @@ import java.util.List;
 
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
-    @Query("SELECT p FROM Playlist p WHERE p.user.userNo IN :userNos GROUP BY p.user.userNo, p.playlistId")
+    @Query("SELECT p FROM Playlist p WHERE p.user.userNo IN :userNos GROUP BY p.user.userNo, p.playlistId, p.music.musicId")
     Page<Playlist> findDistinctPlaylistsByUserNos(@Param("userNos") List<Integer> userNos, Pageable pageable);
+
+
     int countByMusic_Category_CategoryId(int categoryId);  // 카테고리별 곡 수를 세는 메소드
     int countByUser_UserNo(int userNo);  // 사용자별 곡 수를 세는 메소드
 
