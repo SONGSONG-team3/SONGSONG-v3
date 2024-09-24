@@ -32,11 +32,6 @@ public class PageController {
         return "myplaylist";
     }
 
-//    @GetMapping("/otherplaylist")
-//    public String otherplaylist() {
-//        return "otherplaylist";
-//    }
-
     @GetMapping("/otherplaylist/{userNo}")
     public String otherPlaylistPage(@PathVariable("userNo") int userNo) {
         return "otherplaylist";  // otherplaylist.html 페이지로 이동
