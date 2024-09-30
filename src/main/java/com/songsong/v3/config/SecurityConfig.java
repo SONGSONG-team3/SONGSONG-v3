@@ -42,12 +42,12 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
-                                "/",
-                                "/login",
-                                "/signup",
-                                "/mypage",
-                                "/myplaylist",
-                                "/otherplaylist/**",
+//                                "/",
+//                                "/login",
+//                                "/signup",
+//                                "/mypage",
+//                                "/myplaylist",
+//                                "/otherplaylist/**",
                                 "index.html",
                                 "/assets/**",
                                 "/api/v3/users/signup",
