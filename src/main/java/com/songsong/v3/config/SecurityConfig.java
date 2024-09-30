@@ -53,7 +53,10 @@ public class SecurityConfig {
                                 "/api/v3/users/signup",
                                 "/api/v3/users/login",
                                 "/api/v3/playlists/**",
-                                "/favicon.ico"
+                                "/favicon.ico",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**" // Allow access to OpenAPI docs
+
                                 ).permitAll()
 
                         .anyRequest().authenticated())
