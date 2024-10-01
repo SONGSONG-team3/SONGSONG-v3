@@ -120,7 +120,7 @@ public class PlaylistController {
                         musicDto.setMusicArtist(music.getMusicArtist());
                         musicDto.setMusicLink(music.getMusicLink());
 //                        musicDto.setCategoryDto(new CategoryDto(music.getCategory().getCategoryId(), music.getCategory().getCategoryName()));
-                        musicDto.setMusicGenre("발라드");
+                        musicDto.setMusicGenre(music.getMusicGenre());
                     }
 
                     PlaylistDto dto = new PlaylistDto();
