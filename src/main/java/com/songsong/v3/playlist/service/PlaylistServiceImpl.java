@@ -1,5 +1,8 @@
 package com.songsong.v3.playlist.service;
 
+import com.songsong.v3.common.entity.Code;
+import com.songsong.v3.common.entity.key.CodeKey;
+import com.songsong.v3.common.repository.CodeRepository;
 import com.songsong.v3.playlist.dto.PlaylistDto;
 import com.songsong.v3.playlist.dto.PlaylistParamDto;
 import com.songsong.v3.playlist.dto.PlaylistResultDto;
@@ -32,16 +35,34 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final CategoryRepository categoryRepository;
     private final UserCategoryRepository usercategoryRepository;
     private final MusicService musicService;
+    private final CodeRepository codeRepository; // Code 레포지토리 추가
 
     @Override
     public PlaylistResultDto getPlaylistsByCategory(PlaylistParamDto playlistParamDto) {
         PlaylistResultDto resultDto = new PlaylistResultDto();
         List<PlaylistDto> playlistDtoList = new ArrayList<>();
 
-        // categoryId로 userNo 목록을 가져옴
-        List<Integer> userNos = usercategoryRepository.findUserNoByCategoryId(playlistParamDto.getSearchCategory());
+        // 공통 코드 테이블에서 카테고리 코드 가져오기
+        int categoryCode = playlistParamDto.getSearchCategory();    // 요청에서 받은 카테고리 코드
 
-        System.out.println("카테고리 ID " + playlistParamDto.getSearchCategory() + "에 해당하는 유저 No: " + userNos);
+        // 숫자형 categoryCode를 두 자리 문자열로 변환
+        String formattedCategoryCode = String.format("%02d", categoryCode);
+
+        System.out.println("선택한 카테고리 코드: " + formattedCategoryCode);
+
+        // Code 테이블에서 해당 카테고리의 코드를 조회
+        Code categoryCodeEntity = codeRepository.findById(new CodeKey("001", formattedCategoryCode))
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 카테고리 코드입니다."));
+
+        System.out.println("선택한 카테고리 코드: " + formattedCategoryCode);
+        System.out.println("선택한 카테고리 이름: " + categoryCodeEntity.getCodeName());
+
+        // categoryId로 userNo 목록을 가져옴
+        //List<Integer> userNos = usercategoryRepository.findUserNoByCategoryId(playlistParamDto.getSearchCategory());
+        List<Integer> userNos = usercategoryRepository.findUserNoByCategoryId(categoryCode);
+
+        // System.out.println("카테고리 ID " + playlistParamDto.getSearchCategory() + "에 해당하는 유저 No: " + userNos);
+        System.out.println("카테고리 코드 " + categoryCode + "에 해당하는 유저 No: " + userNos);
 
         // 전체 플레이리스트 개수 (실제 userNos의 크기를 기준으로 함)
         int totalPlaylistsCount = userNos.size();
