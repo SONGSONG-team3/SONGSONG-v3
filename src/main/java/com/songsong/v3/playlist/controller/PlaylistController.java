@@ -119,7 +119,8 @@ public class PlaylistController {
                         musicDto.setMusicName(music.getMusicName());
                         musicDto.setMusicArtist(music.getMusicArtist());
                         musicDto.setMusicLink(music.getMusicLink());
-                        musicDto.setCategoryDto(new CategoryDto(music.getCategory().getCategoryId(), music.getCategory().getCategoryName()));
+//                        musicDto.setCategoryDto(new CategoryDto(music.getCategory().getCategoryId(), music.getCategory().getCategoryName()));
+                        musicDto.setMusicGenre("발라드");
                     }
 
                     PlaylistDto dto = new PlaylistDto();
@@ -173,13 +174,16 @@ public class PlaylistController {
         String userEmail = jwtTokenProvider.getUserEmail(jwtToken);
         User user = userRepository.findByUserEmail(userEmail);
         Music music = new Music();
+        music.setMusicGenre(musicDto.getMusicGenre());
+        music.setMusicCountry(musicDto.getMusicCountry());
+        music.setMusicLanguage(musicDto.getMusicLanguage());
         music.setMusicName(musicDto.getMusicName());
         music.setMusicArtist(musicDto.getMusicArtist());
         music.setMusicLink(musicDto.getMusicLink());
 
-        Category category = categoryService.findById(musicDto.getCategoryId());
-        System.out.println(musicDto.getCategoryId());
-        music.setCategory(category);
+//        Category category = categoryService.findById(musicDto.getCategoryId());
+//        System.out.println(musicDto.getCategoryId());
+//        music.setCategory(category);
         musicService.addMusic(music);
 
         Playlist playlist = new Playlist();

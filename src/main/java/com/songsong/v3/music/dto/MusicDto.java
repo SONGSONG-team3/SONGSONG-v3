@@ -10,5 +10,7 @@ public class MusicDto {
     private String musicArtist;
     private CategoryDto categoryDto;
     private String musicLink;
-    private int categoryId;
+    private String musicGenre;
+    private String musicLanguage;
+    private String musicCountry;
 }
