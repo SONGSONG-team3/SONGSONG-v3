@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 "/api/v3/users/signup",
                                 "/api/v3/users/login",
                                 "/api/v3/playlists/**",
+                                "/api/v3/comments/**",
                                 "/favicon.ico",
                                 "/swagger-ui/**",
                                 "/commoncodes",
