@@ -4,6 +4,7 @@ import com.songsong.v3.playlist.entity.Playlist;
 import com.songsong.v3.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "comment")
 public class Comment {
     @Id
@@ -33,4 +33,13 @@ public class Comment {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @Builder
+    public Comment(int commentId, Playlist playlist, User user, String content, LocalDateTime createdAt) {
+        this.commentId = commentId;
+        this.playlist = playlist;
+        this.user = user;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
 }
