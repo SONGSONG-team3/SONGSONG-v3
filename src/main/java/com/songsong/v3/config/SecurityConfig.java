@@ -57,6 +57,7 @@ public class SecurityConfig {
                                 "/favicon.ico",
                                 "/swagger-ui/**",
                                 "/commoncodes",
+                                "/api/v3/comments/**",
                                 "/v3/api-docs/**" // Allow access to OpenAPI docs
 
                                 ).permitAll()

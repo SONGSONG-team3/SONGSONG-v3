@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +57,13 @@ public class CommentServiceImpl implements CommentService{
             commentResponseDto.setMessage("서버 오류가 발생했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(commentResponseDto);
         }
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByPlaylistId(int playlistId) {
+        return commentRepository.findByPlaylistPlaylistId(playlistId)
+                .stream()
+                .map(comment -> new CommentDto(comment.getContent(), comment.getCommentId()))
+                .collect(Collectors.toList());
     }
 }
