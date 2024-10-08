@@ -15,7 +15,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/")
-    public ResponseEntity<CommentResponseDto> createComment(@RequestBody CommentDto commentDto, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<CommentResponseDto> createComment(@RequestBody CommentDto commentDto) {
         return commentService.createComment(commentDto);
     }
 }
